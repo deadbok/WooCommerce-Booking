@@ -3,11 +3,11 @@
 /**
  * Fired during plugin deactivation
  *
- * @link       http://example.com
+ * @link       http://groenholdt.net
  * @since      1.0.0
  *
- * @package    Plugin_Name
- * @subpackage Plugin_Name/includes
+ * @package    Wc_Booking
+ * @subpackage Wc_Booking/includes
  */
 
 /**
@@ -16,11 +16,11 @@
  * This class defines all code necessary to run during the plugin's deactivation.
  *
  * @since      1.0.0
- * @package    Plugin_Name
- * @subpackage Plugin_Name/includes
- * @author     Your Name <email@example.com>
+ * @package    Wc_Booking
+ * @subpackage Wc_Booking/includes
+ * @author     Martin Grønholdt <martin.groenholdt@gmail.com>
  */
-class Plugin_Name_Deactivator {
+class Wc_Booking_Deactivator {
 
 	/**
 	 * Short Description. (use period)
