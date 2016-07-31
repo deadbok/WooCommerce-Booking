@@ -52,6 +52,18 @@ class Wc_Booking_Admin {
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
 
+		add_action('init', array($this, 'includes'));
+	}
+	
+	/**
+	 * Includes needed for the admin interface.
+	 * 
+	 * @since 1.0.0
+	 */
+	public function includes()
+	{
+		//Administration menus.
+		require_once plugin_dir_path (dirname (__FILE__)) . 'admin/class-wc-booking-admin-menus.php';
 	}
 
 	/**

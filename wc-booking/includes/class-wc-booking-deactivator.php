@@ -1,5 +1,6 @@
 <?php
 
+
 /**
  * Fired during plugin deactivation
  *
@@ -13,24 +14,27 @@
 /**
  * Fired during plugin deactivation.
  *
- * This class defines all code necessary to run during the plugin's deactivation.
+ * This class defines all code necessary to run during the plugin's
+ * deactivation.
  *
- * @since      1.0.0
- * @package    Wc_Booking
+ * @since 1.0.0
+ * @package Wc_Booking
  * @subpackage Wc_Booking/includes
- * @author     Martin Grønholdt <martin.groenholdt@gmail.com>
+ * @author Martin Grønholdt <martin.groenholdt@gmail.com>
  */
-class Wc_Booking_Deactivator {
+class Wc_Booking_Deactivator
+{
 
 	/**
-	 * Short Description. (use period)
+	 * Short Description.
+	 * (use period)
 	 *
 	 * Long Description.
 	 *
-	 * @since    1.0.0
+	 * @since 1.0.0
 	 */
-	public static function deactivate() {
-
+	public static function deactivate()
+	{
+		flush_rewrite_rules();
 	}
-
 }
