@@ -53,7 +53,7 @@ class WC_Booking_Post_Types
 	}
 
 	//Register ticket type.
-	public function register_wc_booking_ticket_type()
+	public static function register_wc_booking_ticket_type()
 	{
 		$labels = array(
 				'name'                  => _x( 'Tickets', 'Post Type General Name', 'wc-booking' ),
@@ -90,13 +90,15 @@ class WC_Booking_Post_Types
 				'edit_others_posts'     => 'edit_others_posts',
 				'publish_posts'         => 'publish_posts',
 				'read_private_posts'    => 'read_private_posts',
+				'publish_posts '		=> 'publish_posts',
+				'create_post'			=> 'create_post',
 		);
 		$args = array(
 				'label'                 => __( 'Ticket', 'wc-booking' ),
 				'description'           => __( 'WooCommerce booking ticket', 'wc-booking' ),
 				'labels'                => $labels,
 				'supports'              => array( 'title', 'editor', 'author', 'custom-fields', ),
-				'taxonomies'            => array( 'category', 'wc-ticket' ),
+				'taxonomies'            => array( 'category' ),
 				'hierarchical'          => true,
 				'public'                => true,
 				'show_ui'               => true,
@@ -109,7 +111,9 @@ class WC_Booking_Post_Types
 				'has_archive'           => true,
 				'exclude_from_search'   => false,
 				'publicly_queryable'    => true,
-				'capabilities'          => $capabilities,
+				//'capabilities'          => $capabilities,
+				'capability_type'		=> 'post',
+				'map_meta_cap'			=> true,
 		);
 		register_post_type( 'wc-ticket', $args );
 	}

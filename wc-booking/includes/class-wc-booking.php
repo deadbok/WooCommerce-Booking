@@ -131,16 +131,17 @@ class Wc_Booking
 		require_once plugin_dir_path(dirname(__FILE__)) . 'public/class-wc-booking-public.php';
 		
 		/**
-		 * The class responsible for defining all actions relating to metaboxes.
+		 * The class responsible for defining all actions relating to
+		 * metaboxes.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-wc-booking-admin-meta-boxes.php';
+		require_once plugin_dir_path(dirname(__FILE__)) . 'admin/class-wc-booking-admin-meta-boxes.php';
 		
 		/**
 		 * The class responsible for sanitizing user input
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-wc-booking-sanitize.php';
+		require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-wc-booking-sanitize.php';
 		
-		//Post types.
+		// Post types.
 		require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-wc-booking-post-types.php';
 		
 		$this->loader = new Wc_Booking_Loader();
@@ -174,8 +175,8 @@ class Wc_Booking
 	private function define_admin_hooks()
 	{
 		$plugin_admin = new Wc_Booking_Admin($this->get_plugin_name(), $this->get_version());
-				
-		$this->loader->add_action( 'init', $this->post_types, 'register_wc_booking_ticket_type' );
+		
+		$this->loader->add_action('init', $this->post_types, 'register_wc_booking_ticket_type');
 		
 		$this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_styles');
 		$this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts');
@@ -205,10 +206,11 @@ class Wc_Booking
 	private function define_metabox_hooks()
 	{
 		$plugin_metaboxes = new WC_Booking_Admin_Metaboxes($this->get_plugin_name(), $this->get_version());
-
+		
 		$this->loader->add_action('add_meta_boxes', $plugin_metaboxes, 'add_metaboxes');
-		$this->loader->add_action('add_meta_boxes_job', $plugin_metaboxes, 'set_meta');
-		$this->loader->add_action('save_post_job', $plugin_metaboxes, 'validate_meta', 10, 2);
+		$this->loader->add_action('add_meta_boxes_wc-ticket', $plugin_metaboxes, 'set_meta');
+		$this->loader->add_action('save_post', $plugin_metaboxes, 'validate_meta', 10, 2);
+		$this->loader->add_action('publish_post', $plugin_metaboxes, 'validate_meta', 10, 2);
 	}
 
 	/**

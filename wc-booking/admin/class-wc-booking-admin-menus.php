@@ -37,8 +37,8 @@ class WC_Booking_Admin_Menus
 	 */
 	public function admin_menu()
 	{
-		add_menu_page(__('WooCommerce booking'), __('WooCommerce booking'), 'manage_options', 'wc-booking', none, 'dashicons-tickets-alt');
-		add_submenu_page('wc-booking', __('Tickets'), __('Tickets'), 'manage_options', 'wc-booking-tickets-page', none);
+		add_menu_page(__('WooCommerce booking'), __('WooCommerce booking'), 'manage_options', 'wc-booking', '', 'dashicons-tickets-alt');
+		add_submenu_page('wc-booking', __('Tickets'), __('Tickets'), 'manage_options', 'wc-booking-tickets-page', '');
 		/*add_submenu_page('wc-booking', __('Add ticket'), __('Add ticket'), 'manage_options', 'wc-booking-ticket-page', array(
 				$this,
 				'ticket_page'
