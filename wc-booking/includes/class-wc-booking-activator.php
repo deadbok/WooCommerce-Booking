@@ -38,6 +38,7 @@ class Wc_Booking_Activator
 		require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-wc-booking-post-types.php';
 		
 		WC_Booking_Post_Types::register_wc_booking_ticket_type();
+		WC_Booking_Post_Types::register_wc_booking_departures_type();
 		
 		flush_rewrite_rules();
 	}

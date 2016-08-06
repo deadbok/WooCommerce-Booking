@@ -134,7 +134,7 @@ class Wc_Booking
 		 * The class responsible for defining all actions relating to
 		 * metaboxes.
 		 */
-		require_once plugin_dir_path(dirname(__FILE__)) . 'admin/class-wc-booking-admin-meta-boxes.php';
+		require_once plugin_dir_path(dirname(__FILE__)) . 'admin/class-wc-booking-admin-metaboxes.php';
 		
 		/**
 		 * The class responsible for sanitizing user input
@@ -177,6 +177,7 @@ class Wc_Booking
 		$plugin_admin = new Wc_Booking_Admin($this->get_plugin_name(), $this->get_version());
 		
 		$this->loader->add_action('init', $this->post_types, 'register_wc_booking_ticket_type');
+		$this->loader->add_action('init', $this->post_types, 'register_wc_booking_departures_type');
 		
 		$this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_styles');
 		$this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts');
@@ -206,10 +207,15 @@ class Wc_Booking
 	private function define_metabox_hooks()
 	{
 		$plugin_metaboxes = new WC_Booking_Admin_Metaboxes($this->get_plugin_name(), $this->get_version());
+
+		$this->loader->add_action('admin_enqueue_scripts', $plugin_metaboxes, 'enqueue_styles');
+		$this->loader->add_action('admin_enqueue_scripts', $plugin_metaboxes, 'enqueue_scripts');
 		
 		$this->loader->add_action('add_meta_boxes', $plugin_metaboxes, 'add_metaboxes');
 		$this->loader->add_action('add_meta_boxes_wc-ticket', $plugin_metaboxes, 'set_meta');
 		$this->loader->add_action('save_post_wc-ticket', $plugin_metaboxes, 'validate_meta', 10, 2);
+		$this->loader->add_action('add_meta_boxes_wc-departures', $plugin_metaboxes, 'set_meta');
+		$this->loader->add_action('save_post_wc-departures', $plugin_metaboxes, 'validate_meta', 10, 2);
 		//$this->loader->add_action('publish_post', $plugin_metaboxes, 'validate_meta', 10, 2);
 	}
 
