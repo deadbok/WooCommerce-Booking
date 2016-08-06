@@ -98,6 +98,12 @@ class WC_Booking_Admin_Metaboxes
 		), "wc-ticket", "side", "low", array(
 				'name' => 'price'
 		));
+		add_meta_box("departure_calandar_meta", __("Depature Calendar", 'wc-booking'), array(
+				$this,
+				'metabox'
+		), "wc-ticket", "side", "low", array(
+				'name' => 'departure'
+		));
 		add_meta_box("departures_meta", __("Departures", 'wc-booking'), array(
 				$this,
 				'metabox'
@@ -123,7 +129,7 @@ class WC_Booking_Admin_Metaboxes
 		
 		$nonces[] = 'total_tickets_nonce';
 		$nonces[] = 'price_ticket_nonce';
-		$nonces[] = 'daily_departures_nonce';
+		$nonces[] = 'departure_calendar_nonce';
 		$nonces[] = 'calendar_departures_nonce';
 		foreach ($nonces as $nonce)
 		{
@@ -164,6 +170,10 @@ class WC_Booking_Admin_Metaboxes
 		$fields[] = array(
 				'wc-booking-price',
 				'price'
+		);
+		$fields[] = array(
+				'wc-booking-departure-calendar',
+				'calendar'
 		);
 		$fields[] = array(
 				'wc-booking-daily-departures',
