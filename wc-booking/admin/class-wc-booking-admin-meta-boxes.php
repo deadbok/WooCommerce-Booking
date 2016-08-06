@@ -100,17 +100,20 @@ class WC_Booking_Admin_Metaboxes
 		
 		foreach ($nonces as $nonce)
 		{
-			
+			error_log('Nonce: ' . $nonce);
 			if (! isset($posted[$nonce]))
 			{
+				error_log('Nonce is not set');
 				$nonce_check++;
 			}
 			if (isset($posted[$nonce]) && ! wp_verify_nonce($posted[$nonce], $this->plugin_name))
 			{
+				error_log('Nonce is not ok');
 				$nonce_check++;
 			}
 		}
 		
+		error_log('Nonce check return:' . $nonce_check);
 		return $nonce_check;
 	}
 	// check_nonces()
@@ -128,12 +131,12 @@ class WC_Booking_Admin_Metaboxes
 		$fields = array();
 		
 		$fields[] = array(
-				'total_tickets',
-				'text'
+				'wc-booking-total-tickets',
+				'number'
 		);
 		$fields[] = array(
-				'price_ticket',
-				'text'
+				'wc-booking-price',
+				'price'
 		);
 		
 		return $fields;
@@ -164,6 +167,7 @@ class WC_Booking_Admin_Metaboxes
 			$classes = 'repeater ' . $params['args']['classes'];
 		}
 		
+		error_log('Partial: ' . $params['args']['name']);
 		include (plugin_dir_path(__FILE__) . 'partials/wc-booking-admin-metabox-' . $params['args']['name'] . '.php');
 	}
 	// metabox()
@@ -254,40 +258,32 @@ class WC_Booking_Admin_Metaboxes
 	public function validate_meta($post_id, $object)
 	{
 		// wp_die('<pre>' . print_r($_POST) . '</pre>');
-		error_log('validate');
-		
+		error_log('Post request: ' . print_r($_POST, true));
 		if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE)
 		{
 			return $post_id;
 		}
-		error_log('No autosave');
-		$current_user = wp_get_current_user();
-		error_log(print_r($current_user->get_role_caps(), true));
+		error_log('Permission check');
 		if (! current_user_can('edit_posts', $post_id))
 		{
 			return $post_id;
 		}
-		error_log('user ok');
-		
-		error_log($object->post_type);
+		error_log('Type check');
 		if ('wc-ticket' !== $object->post_type)
 		{
 			return $post_id;
 		}
 		
-		error_log('type ok');
-		error_log(print_r($_POST));
-		
+		error_log('Nonce check');
 		$nonce_check = $this->check_nonces($_POST);
-		
 		if (0 < $nonce_check)
 		{
 			return $post_id;
 		}
 		
-		error_log('nonce ok');
-		
 		$metas = $this->get_metabox_fields();
+		
+		error_log('Metas: ' . print_r($metas, true));
 		
 		foreach ($metas as $meta)
 		{

@@ -209,8 +209,8 @@ class Wc_Booking
 		
 		$this->loader->add_action('add_meta_boxes', $plugin_metaboxes, 'add_metaboxes');
 		$this->loader->add_action('add_meta_boxes_wc-ticket', $plugin_metaboxes, 'set_meta');
-		$this->loader->add_action('save_post', $plugin_metaboxes, 'validate_meta', 10, 2);
-		$this->loader->add_action('publish_post', $plugin_metaboxes, 'validate_meta', 10, 2);
+		$this->loader->add_action('save_post_wc-ticket', $plugin_metaboxes, 'validate_meta', 10, 2);
+		//$this->loader->add_action('publish_post', $plugin_metaboxes, 'validate_meta', 10, 2);
 	}
 
 	/**

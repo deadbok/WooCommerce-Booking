@@ -1,4 +1,23 @@
-<?php wp_nonce_field( basename( __FILE__ ), 'total_tickets_nonce' ); ?>
-<p>
-	<input class="widefat" type="number" size="5" name="wc-booking-total-tickets" placeholder="<?php _e('total tickets', 'wc-booking') ?>" />
-</p>
+<?php
+wp_nonce_field($this->plugin_name, 'total_tickets_nonce');
+
+$atts = array();
+$atts['description'] = __('Total number of tickets', 'wc-booking');
+$atts['id'] = 'wc-booking-total-tickets';
+$atts['name'] = 'wc-booking-total-tickets';
+$atts['type'] = 'number';
+$atts['size'] = 5;
+$atts['placeholder'] = __('number of tickets', 'wc-booking');
+;
+$atts['classes'] = 'widefat';
+$atts['value'] = 1;
+
+if (! empty($this->meta[$atts['id']][0]))
+{
+	$atts['value'] = $this->meta[$atts['id']][0];
+}
+apply_filters($this->plugin_name . '-field-' . $atts['id'], $atts);
+?><p><?php
+include (plugin_dir_path(__FILE__) . $this->plugin_name . '-admin-field-' . $atts['type'] . '.php');
+?></p><?php
+

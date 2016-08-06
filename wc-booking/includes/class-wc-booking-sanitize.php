@@ -72,8 +72,10 @@ class WC_Booking_Sanitize {
 			case 'time'				:
 			case 'week'				: $sanitized = strtotime( $this->data ); break;
 
-			case 'number'			:
+			case 'number'			: $sanitized = filter_var( $this->data, FILTER_SANITIZE_NUMBER_INT);
 			case 'range'			: $sanitized = intval( $this->data ); break;
+			
+			case 'price'			: $sanitized = filter_var( $this->data, FILTER_SANITIZE_NUMBER_FLOAT);
 
 			case 'hidden'			:
 			case 'month'			:
@@ -88,6 +90,8 @@ class WC_Booking_Sanitize {
 			case 'url'				: $sanitized = esc_url( $this->data ); break;
 
 		} // switch
+		
+		error_log('Sanitized: ' . print_r($sanitized, true));
 
 		/**
 		 * Add additional santization after the default .
