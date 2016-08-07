@@ -40,9 +40,18 @@ class WC_Booking_Admin_Metaboxes
 	 * @var string $version The current version of this plugin.
 	 */
 	private $version;
+	
+	/**
+	 * The the admin metabox fields
+	 *
+	 * @since 1.0.0
+	 * @access private
+	 * @var array $fields The admin metabox fields.
+	 */
+	private $fields;
 
 	/**
-	 * Initialize the class and set its properties.
+	 * Initialise the class and set its properties.
 	 *
 	 * @since 1.0.0
 	 * @param string $Now_Hiring
@@ -54,6 +63,74 @@ class WC_Booking_Admin_Metaboxes
 	{
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
+		
+		$this->fields = array();
+		
+		$this->fields['wc-ticket'] = array();
+		$this->fields['wc-ticket']['total_tickets_meta'] = array(
+				'name' => 'wc-booking-total-tickets',
+				'title' => __("Total Tickets", 'wc-booking'),
+				'context' => 'side',
+				'priority' => 'low',
+				'type' => 'number',
+				'metabox' => 'total_tickets',
+				'nonce' => 'total_tickets_nonce'
+		);
+		$this->fields['wc-ticket']['ticket_price_meta'] = array(
+				'name' => 'wc-booking-ticket-price',
+				'title' => __("Ticket Price", 'wc-booking'),
+				'context' => 'side',
+				'priority' => 'low',
+				'type' => 'price',
+				'metabox' => 'ticket_price',
+				'nonce' => 'price_ticket_nonce'
+		);
+		$this->fields['wc-ticket']['return_ticket_meta'] = array(
+				'name' => 'wc-booking-return-ticket',
+				'title' => __("Return Ticket", 'wc-booking'),
+				'context' => 'side',
+				'priority' => 'low',
+				'type' => 'select',
+				'metabox' => 'return_ticket',
+				'nonce' => 'return_ticket_nonce'
+		);
+		$this->fields['wc-ticket']['departure_calender_meta'] = array(
+				'name' => 'wc-booking-departure-calendar',
+				'title' => __("Departure", 'wc-booking'),
+				'context' => 'side',
+				'priority' => 'low',
+				'type' => 'select',
+				'metabox' => 'departure_calendar',
+				'nonce' => 'departure_calendar_nonce'
+		);
+		$this->fields['wc-departures'] = array();
+		$this->fields['wc-departures']['minute_departures_meta'] = array(
+				'name' => 'wc-booking-minute-depatures',
+				'title' => __("Minute By Minute Depature Rules", 'wc-booking'),
+				'context' => 'normal',
+				'priority' => 'high',
+				'type' => 'text',
+				'metabox' => 'departures',
+				'nonce' => 'minute_departure_rules_nonce'
+		);
+		$this->fields['wc-departures']['hourly_departures_meta'] = array(
+				'name' => 'wc-booking-daily-depatures',
+				'title' => __("Hourly Depature Rules", 'wc-booking'),
+				'context' => 'normal', 
+				'priority' => 'high',
+				'type' => 'text',
+				'metabox' => 'departures',
+				'nonce' => 'hourly_departure_rules_nonce'
+		);
+		$this->fields['wc-departures']['calendar_departures_meta'] = array(
+				'name' => 'wc-booking-calendar-departures',
+				'title' => __("Calender View", 'wc-booking'),
+				'context' => 'normal',
+				'priority' => 'high',
+				'type' => 'calendar',
+				'metabox' => 'departures',
+				'nonce' => 'calendar_departures_nonce'
+		);
 		
 		$this->set_meta();
 	}
@@ -86,33 +163,29 @@ class WC_Booking_Admin_Metaboxes
 	 */
 	public function add_metaboxes()
 	{
-		add_meta_box("total_tickets_meta", __("Total Tickets", 'wc-booking'), array(
-				$this,
-				'metabox'
-		), "wc-ticket", "side", "low", array(
-				'name' => 'total-tickets'
-		));
-		add_meta_box("ticket_price_meta", __("Price", 'wc-booking'), array(
-				$this,
-				'metabox'
-		), "wc-ticket", "side", "low", array(
-				'name' => 'price'
-		));
-		add_meta_box("departure_calandar_meta", __("Depature Calendar", 'wc-booking'), array(
-				$this,
-				'metabox'
-		), "wc-ticket", "side", "low", array(
-				'name' => 'departure'
-		));
-		add_meta_box("departures_meta", __("Departures", 'wc-booking'), array(
-				$this,
-				'metabox'
-		), "wc-departures", "normal", "high", array(
-				'name' => 'departures'
-		));
+		$metaboxes = array();
+		foreach ($this->get_metabox_fields() as $type => $fields)
+		{
+			foreach ($fields as $id => $field)
+			{
+				if (!(in_array($field['metabox'], $metaboxes)))
+				{
+					error_log('Adding metabox: ' . $field['metabox']);
+					error_log(' Type: ' . $type);
+					error_log(' ID: ' . $id);
+					error_log(' Field: ' . $field['name']);
+					add_meta_box($id, $field['title'], array(
+							$this,
+							'metabox'
+					), $type, $field['context'], $field['priority'], array(
+							'metabox' => $field['metabox']
+					));
+					$metaboxes[] = $field['metabox'];
+				}
+			}
+		}
 	}
-	// add_metaboxes()
-	
+
 	/**
 	 * Check each nonce.
 	 * If any don't verify, $nonce_check is increased.
@@ -124,22 +197,19 @@ class WC_Booking_Admin_Metaboxes
 	 */
 	private function check_nonces($posted)
 	{
-		$nonces = array();
+		$metas = $this->get_metabox_fields();
 		$nonce_check = 0;
 		
-		$nonces[] = 'total_tickets_nonce';
-		$nonces[] = 'price_ticket_nonce';
-		$nonces[] = 'departure_calendar_nonce';
-		$nonces[] = 'calendar_departures_nonce';
-		foreach ($nonces as $nonce)
+		foreach ($metas[$posted['post_type']] as $meta)
 		{
-			error_log('Nonce: ' . $nonce);
-			if (!isset($posted[$nonce]))
+			error_log('Meta: ' . print_r($meta, true));
+			error_log('Nonce: ' . $meta['nonce']);
+			if (!isset($posted[$meta['nonce']]))
 			{
 				error_log('Nonce is not set');
 				$nonce_check++;
 			}
-			if (isset($posted[$nonce]) && !wp_verify_nonce($posted[$nonce], $this->plugin_name))
+			if (isset($posted[$meta['nonce']]) && !wp_verify_nonce($posted[$meta['nonce']], $this->plugin_name))
 			{
 				error_log('Nonce is not ok');
 				$nonce_check++;
@@ -149,8 +219,7 @@ class WC_Booking_Admin_Metaboxes
 		error_log('Nonce check return:' . $nonce_check);
 		return $nonce_check;
 	}
-	// check_nonces()
-	
+
 	/**
 	 * Returns an array of the all the metabox fields and their respective
 	 * types
@@ -161,30 +230,7 @@ class WC_Booking_Admin_Metaboxes
 	 */
 	private function get_metabox_fields()
 	{
-		$fields = array();
-		
-		$fields[] = array(
-				'wc-booking-total-tickets',
-				'number'
-		);
-		$fields[] = array(
-				'wc-booking-price',
-				'price'
-		);
-		$fields[] = array(
-				'wc-booking-departure-calendar',
-				'calendar'
-		);
-		$fields[] = array(
-				'wc-booking-daily-departures',
-				'text'
-		);
-		$fields[] = array(
-				'wc-booking-calendar-departures',
-				'calendar'
-		);
-		
-		return $fields;
+		return $this->fields;
 	}
 	// get_metabox_fields()
 	
@@ -201,20 +247,29 @@ class WC_Booking_Admin_Metaboxes
 		{
 			return;
 		}
-		error_log('Post type: ' . $post->post_type);
+
 		if (!(('wc-ticket' === $post->post_type) || ('wc-departures' === $post->post_type)))
 		{
 			return;
 		}
 		
-		if (!empty($params['args']['classes']))
+		error_log('Rendering metabox: ' . $params['args']['metabox']);
+		error_log('Post type: ' . $post->post_type);
+		$fields = array();
+		foreach ($this->get_metabox_fields()[$post->post_type] as $field)
 		{
-			
-			$classes = 'repeater ' . $params['args']['classes'];
+			if ($field['metabox'] === $params['args']['metabox'])
+			{
+				error_log('Field: ' . $field['name']);
+				$fields[] = $field;
+			}	
 		}
 		
-		error_log('Partial: ' . $params['args']['name']);
-		include (plugin_dir_path(__FILE__) . 'partials/wc-booking-admin-metabox-' . $params['args']['name'] . '.php');
+		if (count($fields) > 0)
+		{
+			$name = str_replace('_', '-', $params['args']['metabox']);
+			include (plugin_dir_path(__FILE__) . 'partials/wc-booking-admin-metabox-' . $name . '.php');
+		}
 	}
 
 	private function sanitizer($type, $data)
@@ -233,9 +288,6 @@ class WC_Booking_Admin_Metaboxes
 		
 		$sanitizer->set_data($data);
 		$sanitizer->set_type($type);
-		
-		error_log($data);
-		error_log($type);
 		
 		$return = $sanitizer->clean();
 		
@@ -262,17 +314,9 @@ class WC_Booking_Admin_Metaboxes
 		
 		$this->meta = get_post_custom($post->ID);
 	}
-	// set_meta()
-	
+
 	/**
 	 * Saves metabox data
-	 *
-	 * Repeater section works like this:
-	 * Loops through meta fields
-	 * Loops through submitted data
-	 * Sanitizes each field into $clean array
-	 * Gets max of $clean to use in FOR loop
-	 * FOR loops through $clean, adding each value to $new_value as an array
 	 *
 	 * @since 1.0.0
 	 * @access public
@@ -284,7 +328,6 @@ class WC_Booking_Admin_Metaboxes
 	 */
 	public function validate_meta($post_id, $object)
 	{
-		// wp_die('<pre>' . print_r($_POST) . '</pre>');
 		error_log('Post request: ' . print_r($_POST, true));
 		if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE)
 		{
@@ -312,16 +355,18 @@ class WC_Booking_Admin_Metaboxes
 		
 		error_log('Metas: ' . print_r($metas, true));
 		
-		foreach ($metas as $meta)
+		foreach ($metas[$object->post_type] as $meta)
 		{
 			
-			$name = $meta[0];
-			$type = $meta[1];
+			$name = $meta['name'];
+			$type = $meta['type'];
 			
 			$new_value = $this->sanitizer($type, $_POST[$name]);
 			
+			error_log($name . ': ' . $new_value);
+			
 			update_post_meta($post_id, $name, $new_value);
-		} // foreach
-	} // validate_meta()
-} // class
+		}
+	}
+}
 		

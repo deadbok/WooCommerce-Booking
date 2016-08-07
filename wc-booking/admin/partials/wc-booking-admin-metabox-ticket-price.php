@@ -1,11 +1,11 @@
 <?php
-wp_nonce_field($this->plugin_name, 'price_ticket_nonce');
+wp_nonce_field($this->plugin_name, $fields[0]['nonce']);
 
 $atts = array();
 $atts['description'] = __('The price of the ticket', 'wc-booking');
-$atts['id'] = 'wc-booking-price';
-$atts['name'] = 'wc-booking-price';
-$atts['type'] = 'price';
+$atts['id'] = $fields[0]['name'];
+$atts['name'] = $fields[0]['name'];
+$atts['type'] = $fields[0]['type'];
 $atts['size'] = 5;
 $atts['placeholder'] = __('price', 'wc-booking');
 ;

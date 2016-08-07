@@ -1,18 +1,18 @@
 <?php
-wp_nonce_field($this->plugin_name, 'departure_calendar_nonce');
+wp_nonce_field($this->plugin_name, $fields[0]['nonce']);
 
 $atts = array();
-$atts['description'] = __('Departure calendar', 'wc-booking');
-$atts['id'] = 'wc-booking-depature-calendar';
-$atts['name'] = 'wc-booking-depature-calendar';
-$atts['type'] = 'select';
-$atts['placeholder'] = __('number of tickets', 'wc-booking');
+$atts['description'] = __('Return ticket', 'wc-booking');
+$atts['id'] = $fields[0]['name'];
+$atts['name'] = $fields[0]['name'];
+$atts['type'] = $fields[0]['type'];
+$atts['placeholder'] = __('Return Ticket', 'wc-booking');
 $atts['classes'] = 'widefat';
 $atts['value'] = '';
 $atts['options'] = array();
 //Get all wc-departures type posts.
 $args = array(
-	'post_type' => 'wc-departures',
+	'post_type' => 'wc-ticket',
  );
 $posts = get_posts( $args );
 //Add them as options to the select input
