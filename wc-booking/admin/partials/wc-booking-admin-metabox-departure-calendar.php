@@ -27,7 +27,7 @@ if (!empty($this->meta[$atts['id']][0]))
 	$atts['value'] = $this->meta[$atts['id']][0];
 }
 apply_filters($this->plugin_name . '-field-' . $atts['id'], $atts);
-?><p><?php
+?><p class="form-field"><?php
 include (plugin_dir_path(__FILE__) . $this->plugin_name . '-admin-field-' . $atts['type'] . '.php');
 ?></p><?php
 

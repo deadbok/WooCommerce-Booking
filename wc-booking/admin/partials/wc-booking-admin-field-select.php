@@ -18,7 +18,7 @@ if (!empty($atts['label']))
 		<?php
 	}
 	?>
-	</select><?php
+	</select><br /><?php
 	if (!empty($atts['description']))
 	{
 		?><span class="description"><?php esc_html_e( $atts['description'], 'wc-booking' ); ?></span><?php

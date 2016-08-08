@@ -8,7 +8,7 @@ if (! empty($atts['label']))
 	name="<?php echo esc_attr( $atts['name'] ); ?>"
 	placeholder="<?php echo esc_attr( $atts['placeholder'] ); ?>"
 	type="number" step="0.01"
-	value="<?php echo esc_attr( $atts['value'] ); ?>" /><?php
+	value="<?php echo esc_attr( $atts['value'] ); ?>" /><br /><?php
 	if (! empty($atts['description']))
 	{
 		?><span class="description"><?php esc_html_e( $atts['description'], 'wc-booking' ); ?></span><?php

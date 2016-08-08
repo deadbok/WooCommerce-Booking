@@ -3,7 +3,7 @@ if (! empty($atts['label']))
 {
 	?><label for="<?php echo esc_attr( $atts['id'] ); ?>"><?php esc_html_e( $atts['label'], 'wc-booking' ); ?>: </label><?php
 }
-?><div class="<?php echo esc_attr( $atts['classes'] ); ?> wc-booking-datepicker"
+?><div class="<?php echo esc_attr( $atts['classes'] ); ?> wc-booking-field-datepicker"
 	id="<?php echo esc_attr( $atts['id'] ); ?>"
 	name="<?php echo esc_attr( $atts['name'] ); ?>"
 	type="text"

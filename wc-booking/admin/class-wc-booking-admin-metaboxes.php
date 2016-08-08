@@ -104,23 +104,50 @@ class WC_Booking_Admin_Metaboxes
 				'nonce' => 'departure_calendar_nonce'
 		);
 		$this->fields['wc-departures'] = array();
-		$this->fields['wc-departures']['minute_departures_meta'] = array(
-				'name' => 'wc-booking-minute-depatures',
-				'title' => __("Minute By Minute Depature Rules", 'wc-booking'),
+		$this->fields['wc-departures']['departure_rule_id_meta'] = array(
+				'name' => 'wc-booking-departure-rule-id',
+				'title' => __("Depature Rules", 'wc-booking'),
+				'context' => 'normal',
+				'priority' => 'high',
+				'type' => 'hidden',
+				'metabox' => 'departures',
+				'nonce' => 'departure_rule_id_nonce'
+		);
+		$this->fields['wc-departures']['departure_rule_name_meta'] = array(
+				'name' => 'wc-booking-departure-rule-name',
+				'title' => __("Depature Rule Name", 'wc-booking'),
 				'context' => 'normal',
 				'priority' => 'high',
 				'type' => 'text',
 				'metabox' => 'departures',
-				'nonce' => 'minute_departure_rules_nonce'
+				'nonce' => 'departure_rule_name_nonce'
 		);
-		$this->fields['wc-departures']['hourly_departures_meta'] = array(
-				'name' => 'wc-booking-daily-depatures',
-				'title' => __("Hourly Depature Rules", 'wc-booking'),
-				'context' => 'normal', 
+		$this->fields['wc-departures']['departure_rule_meta'] = array(
+				'name' => 'wc-booking-departure-rule',
+				'title' => __("Depature Rule", 'wc-booking'),
+				'context' => 'normal',
 				'priority' => 'high',
 				'type' => 'text',
 				'metabox' => 'departures',
-				'nonce' => 'hourly_departure_rules_nonce'
+				'nonce' => 'departure_rule_nonce'
+		);
+		$this->fields['wc-departures']['departure_meta'] = array(
+				'name' => 'wc-booking-departure',
+				'title' => __("Depature Rules", 'wc-booking'),
+				'context' => 'normal',
+				'priority' => 'high',
+				'type' => 'select',
+				'metabox' => 'departures',
+				'nonce' => 'departure_nonce'
+		);
+		$this->fields['wc-departures']['departure_rules_meta'] = array(
+				'name' => 'wc-booking-departure_rules',
+				'title' => __("Depature Rules", 'wc-booking'),
+				'context' => 'normal', 
+				'priority' => 'high',
+				'type' => 'list',
+				'metabox' => 'departures',
+				'nonce' => 'departure_rules_nonce'
 		);
 		$this->fields['wc-departures']['calendar_departures_meta'] = array(
 				'name' => 'wc-booking-calendar-departures',
@@ -168,6 +195,7 @@ class WC_Booking_Admin_Metaboxes
 		{
 			foreach ($fields as $id => $field)
 			{
+				//Only render each metabox group one time.
 				if (!(in_array($field['metabox'], $metaboxes)))
 				{
 					error_log('Adding metabox: ' . $field['metabox']);
